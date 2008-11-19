@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/dictionary.txt" lang="en" >
+        <file alias="dictionary.txt" >dictionary.txt</file>
+    </qresource>
+</RCC>
