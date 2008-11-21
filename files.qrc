@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/dictionary.txt" lang="en" >
+    <qresource prefix="/" >
         <file alias="dictionary.txt" >dictionary.txt</file>
     </qresource>
 </RCC>

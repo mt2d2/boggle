@@ -5,7 +5,9 @@ Lexicon::Lexicon(QString path)
     this->filePath = path;
     this->dictionary = new QStringList();
 
+    qDebug() << "Initial: " << this->dictionary->size();
     this->load();
+    qDebug() << "After load: " << this->dictionary->size();
 }
 
 Lexicon::~Lexicon()

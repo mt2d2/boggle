@@ -1,8 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QtCore>
-#include <QtGui>
+#include "wordsearchthread.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
@@ -10,14 +9,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
+    // Setup instance fields
+    this->isGameRunning = false;
+    this->timer = new QTimer(this);
+    this->time = 0;
+    this->foundWords = new QStringList();
+    this->wordsNotFound = new QStringList();
+    this->diceTray = NULL;
+    this->lexicon = new Lexicon(":/dictionary.txt");
+
     // Make custom connections
     QObject::connect(m_ui->startButton, SIGNAL(clicked()), SLOT(onStartButtonClicked()));
-
-    // Setup instance fields
-    this->foundWords = new QStringList();
-    this->lexicon = new Lexicon("dictionary.txt");
-    this->isGameRunning = false;
-    this->diceTray = NULL;
+    QObject::connect(this->timer, SIGNAL(timeout()), SLOT(onTimerCountdown()));
 }
 
 MainWindow::~MainWindow()
@@ -25,7 +28,10 @@ MainWindow::~MainWindow()
     delete this->diceTray;
     delete this->m_ui;
     delete this->foundWords;
+    delete this->wordsNotFound;
     delete this->lexicon;
+    delete this->timer;
+    //delete this->time;
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -44,6 +50,7 @@ void MainWindow::onStartButtonClicked()
     if (isGameRunning)
     {
         // Stop
+        this->timer->stop();
         QStringList enteredWords = this->m_ui->wordEdit->toPlainText().split(" ");
 
         if (enteredWords.at(0) != "")
@@ -57,7 +64,7 @@ void MainWindow::onStartButtonClicked()
             }
 
             QMessageBox msgBox;
-            msgBox.setText("Valid words: " + this->foundWords->join(" "));
+            msgBox.setText("Valid words: " + this->foundWords->join(", ") + "\nWords not found: " + this->wordsNotFound->join(", "));
             msgBox.exec();
         }
         this->resetBoard();
@@ -66,6 +73,8 @@ void MainWindow::onStartButtonClicked()
     {
         // Start the game!
         this->enableBlankBoard();
+        this->time = 0;
+        this->timer->start(1000);
     }
 
     isGameRunning = !isGameRunning;
@@ -108,12 +117,16 @@ void MainWindow::enableBlankBoard()
     m_ui->letter15->setText(QString(pieces->at(3)->at(2)->getLetter()));
     m_ui->letter16->setText(QString(pieces->at(3)->at(3)->getLetter()));
 
+    // Start searching for words
+    WordSearchThread* thread = new WordSearchThread(this);
+    thread->start();
 }
 
 void MainWindow::resetBoard()
 {
     // Reset the scores
     this->foundWords->clear();
+    this->wordsNotFound->clear();
 
     // Start the timer
     m_ui->gameStatus->setText(tr("Press Start to begin the game..."));
@@ -146,4 +159,9 @@ void MainWindow::resetBoard()
     m_ui->letter14->setText("_");
     m_ui->letter15->setText("_");
     m_ui->letter16->setText("_");
+}
+
+void MainWindow::onTimerCountdown()
+{
+    this->m_ui->gameStatus->setText(QString("Timer decremented: %1 ").arg( ((int)this->time++ / 4) + 1 ));
 }
