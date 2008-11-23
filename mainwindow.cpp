@@ -50,7 +50,7 @@ void MainWindow::startGame()
 
     // Start the game!
     this->enableBlankBoard();
-    this->time = 15;   // 180 (3 minutes) - 1
+    this->time = 180;   // 180 (3 minutes)
     this->timer->start(1000);
 }
 
