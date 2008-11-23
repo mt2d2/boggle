@@ -66,7 +66,7 @@ void MainWindow::stopGame()
     {
         for (int i = 0; i < enteredWords.size(); i++)
         {
-            QString wordToTest = enteredWords.at(i);
+            QString wordToTest = enteredWords.at(i).toLower();
             if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest))
                 this->foundWords->append(wordToTest);
         }
