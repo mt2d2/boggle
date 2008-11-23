@@ -35,13 +35,15 @@ protected:
     virtual void changeEvent(QEvent *e);
 
 private:
+    void startGame();
+    void stopGame();
     void enableBlankBoard();
     void resetBoard();
 
     Ui::MainWindow *m_ui;
     bool isGameRunning;
     QTimer* timer;
-    int* time;
+    int time;
 };
 
 #endif // MAINWINDOW_H

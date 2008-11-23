@@ -31,7 +31,6 @@ MainWindow::~MainWindow()
     delete this->wordsNotFound;
     delete this->lexicon;
     delete this->timer;
-    //delete this->time;
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -45,39 +44,51 @@ void MainWindow::changeEvent(QEvent *e)
     }
 }
 
+void MainWindow::startGame()
+{
+    isGameRunning = !isGameRunning;
+
+    // Start the game!
+    this->enableBlankBoard();
+    this->time = 15;   // 180 (3 minutes) - 1
+    this->timer->start(1000);
+}
+
+void MainWindow::stopGame()
+{
+    isGameRunning = !isGameRunning;
+
+    // Stop
+    this->timer->stop();
+
+    QStringList enteredWords = this->m_ui->wordEdit->toPlainText().split(" ");
+    if (enteredWords.at(0) != "")
+    {
+        for (int i = 0; i < enteredWords.size(); i++)
+        {
+            QString wordToTest = enteredWords.at(i);
+            if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest))
+                this->foundWords->append(wordToTest);
+        }
+    }
+
+    // Remove all correctly found words
+    for (int i = 0; i < this->foundWords->size(); i++)
+        this->wordsNotFound->removeAll(this->foundWords->at(i));
+
+    QMessageBox msgBox;
+    msgBox.setText("Valid words: " + this->foundWords->join(", ") + "\nWords not found: " + this->wordsNotFound->join(", "));
+    msgBox.exec();
+
+    this->resetBoard();
+}
+
 void MainWindow::onStartButtonClicked()
 {
     if (isGameRunning)
-    {
-        // Stop
-        this->timer->stop();
-        QStringList enteredWords = this->m_ui->wordEdit->toPlainText().split(" ");
-
-        if (enteredWords.at(0) != "")
-        {
-            for (int i = 0; i < enteredWords.size(); i++)
-            {
-                QString wordToTest = enteredWords.at(i);
-
-                if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest))
-                    this->foundWords->append(wordToTest);
-            }
-
-            QMessageBox msgBox;
-            msgBox.setText("Valid words: " + this->foundWords->join(", ") + "\nWords not found: " + this->wordsNotFound->join(", "));
-            msgBox.exec();
-        }
-        this->resetBoard();
-    }
+        this->stopGame();
     else
-    {
-        // Start the game!
-        this->enableBlankBoard();
-        this->time = 0;
-        this->timer->start(1000);
-    }
-
-    isGameRunning = !isGameRunning;
+        this->startGame();
 }
 
 void MainWindow::enableBlankBoard()
@@ -128,8 +139,7 @@ void MainWindow::resetBoard()
     this->foundWords->clear();
     this->wordsNotFound->clear();
 
-    // Start the timer
-    m_ui->gameStatus->setText(tr("Press Start to begin the game..."));
+    this->m_ui->gameStatus->setText(QString("<font color=\"black\">%1</font>").arg(tr("Press Start to begin the game...")));
 
     // Change the start button
     m_ui->startButton->setText(tr("Start"));
@@ -137,7 +147,7 @@ void MainWindow::resetBoard()
     // Empty and enable the entry field
     m_ui->wordEdit->setPlainText(tr("Enter words seperated by one space..."));
     m_ui->wordEdit->setEnabled(false);
-    m_ui->startButton->setFocus();
+     m_ui->startButton->setFocus();
 
     // Reset all the letters
     m_ui->letter1->setText("_");
@@ -163,5 +173,16 @@ void MainWindow::resetBoard()
 
 void MainWindow::onTimerCountdown()
 {
-    this->m_ui->gameStatus->setText(QString("Timer decremented: %1 ").arg( ((int)this->time++ / 4) + 1 ));
+    if (this->time == 0)
+        return this->stopGame();
+
+    this->time--;
+
+    QString minutes = QString("%1").arg((time / 60));
+    QString seconds = (time % 60 == 0) ? "00" :  (time % 60 < 10) ? QString("0%1").arg(time % 60) : QString("%1").arg(time % 60);
+
+    this->m_ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg(minutes + ":" + seconds ));
+
+    if (this->time <= 60)
+        this->m_ui->gameStatus->setText(QString("<font color=\"red\">%1</font>").arg(this->m_ui->gameStatus->text()));
 }
