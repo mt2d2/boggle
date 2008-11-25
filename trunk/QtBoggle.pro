@@ -7,12 +7,10 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     die.cpp \
     dicetray.cpp \
-    lexicon.cpp \
-    wordsearchthread.cpp
+    lexicon.cpp
 HEADERS += mainwindow.h \
     die.h \
     dicetray.h \
-    lexicon.h \
-    wordsearchthread.h
+    lexicon.h
 FORMS += mainwindow.ui
 RESOURCES += files.qrc

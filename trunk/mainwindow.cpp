@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "wordsearchthread.h"
-
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::MainWindow)
@@ -185,4 +183,15 @@ void MainWindow::onTimerCountdown()
 
     if (this->time <= 60)
         this->m_ui->gameStatus->setText(QString("<font color=\"red\">%1</font>").arg(this->m_ui->gameStatus->text()));
+}
+
+void MainWindow::WordSearchThread::run()
+{
+    for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
+    {
+        QString word = parent->lexicon->dictionary->at(i);
+
+        if (parent->diceTray->stringFound(word))
+            parent->wordsNotFound->append(word);
+    }
 }

@@ -3,7 +3,6 @@
 
 #include <QtCore>
 #include <QtGui>
-#include <QtGui/QDialog>
 
 #include "dicetray.h"
 #include "lexicon.h"
@@ -44,6 +43,17 @@ private:
     bool isGameRunning;
     QTimer* timer;
     int time;
+
+    friend class WordSearchThread;
+    class WordSearchThread : public QThread
+    {
+        public:
+            WordSearchThread(MainWindow* p) : parent(p) {}
+            void run();
+        private:
+            MainWindow* parent;
+    };
+
 };
 
 #endif // MAINWINDOW_H
