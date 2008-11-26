@@ -74,7 +74,7 @@ void MainWindow::stopGame()
     for (int i = 0; i < this->foundWords->size(); i++)
         this->wordsNotFound->removeAll(this->foundWords->at(i));
 
-    QMessageBox msgBox;
+    QMessageBox msgBox(this);
     msgBox.setText("Valid words: " + this->foundWords->join(", ") + "\nWords not found: " + this->wordsNotFound->join(", "));
     msgBox.exec();
 
