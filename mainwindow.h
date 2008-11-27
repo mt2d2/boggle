@@ -29,6 +29,7 @@ public:
 public slots:
     void onStartButtonClicked();
     void onTimerCountdown();
+    void closeEvent(QCloseEvent* evt);
 
 protected:
     virtual void changeEvent(QEvent *e);
@@ -43,6 +44,7 @@ private:
     bool isGameRunning;
     QTimer* timer;
     int time;
+    QThread* wordSearchThread;
 
     friend class WordSearchThread;
     class WordSearchThread : public QThread
