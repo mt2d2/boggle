@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->wordsNotFound = new QStringList();
     this->diceTray = NULL;
     this->lexicon = new Lexicon(":/dictionary.txt");
-
     this->wordSearchThread = new WordSearchThread(this);
 
     // Make custom connections
@@ -25,8 +24,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::closeEvent(QCloseEvent* evt)
 {
+    qDebug() << "[Notice] Quit is happening soon";
+
     if (this->wordSearchThread != NULL && this->wordSearchThread->isRunning())
     {
+        qDebug() << "Rouge thread detected; attempting to terminate";
+
         // This waits for the thread to finish its execution
         // Ideally, we would exit straight away, but this CRASHES
         this->wordSearchThread->wait();
@@ -42,6 +45,7 @@ MainWindow::~MainWindow()
     delete this->lexicon;
     delete this->timer;
     delete this->m_ui;
+    delete this->wordSearchThread;
 
     // The dice tray is destroyed when the game stops, but delete it jsut in case the
     // user decides to quit before the game is stopped
@@ -74,6 +78,10 @@ void MainWindow::startGame()
 void MainWindow::stopGame()
 {
     isGameRunning = !isGameRunning;
+
+    // Let the wordSearcherThread finish
+    if (this->wordSearchThread != NULL && this->wordSearchThread->isRunning())
+        this->wordSearchThread->wait();
 
     // Stop
     this->timer->stop();
@@ -210,7 +218,7 @@ void MainWindow::onTimerCountdown()
 void MainWindow::WordSearchThread::run()
 {
     // Delete the thread when it's finished
-    QObject::connect(this, SIGNAL(finished()), this, SLOT(deleteLater()), Qt::QueuedConnection);
+    // QObject::connect(this, SIGNAL(finished()), this, SLOT(deleteLater()), Qt::QueuedConnection);
 
     for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
     {
