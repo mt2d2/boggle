@@ -24,12 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::closeEvent(QCloseEvent* evt)
 {
-    qDebug() << "[Notice] Quit is happening soon";
-
     if (this->wordSearchThread != NULL && this->wordSearchThread->isRunning())
     {
-        qDebug() << "Rouge thread detected; attempting to terminate";
-
         // This waits for the thread to finish its execution
         // Ideally, we would exit straight away, but this CRASHES
         this->wordSearchThread->wait();
