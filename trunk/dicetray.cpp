@@ -5,38 +5,46 @@ DiceTray::DiceTray()
     // Create four QLists of QList<Die*>
     this->dice = new QList<QList<Die*>*>;
     for (int i = 0; i < 4; i++)
-        this->dice->append(new QList<Die*>);
-
+    {
+        QList<Die*>* ptr = new QList<Die*>;
+        this->dice->append(ptr);
+    }
     // Seed the generator, setup for randomness
-    QStringList* godsDice = new QStringList();
+    QStringList godsDice = QStringList();
     srand(QTime::currentTime().msec());
 
-    godsDice->append("LRYTTE");
-    godsDice->append("ANAEEG");
-    godsDice->append("AFPKFS");
-    godsDice->append("YLDEVR");
-    godsDice->append("VTHRWE");
-    godsDice->append("IDSYTT");
-    godsDice->append("XLDERI");
-    godsDice->append("ZNRNHL");
-    godsDice->append("EGHWNE");
-    godsDice->append("OATTOW");
-    godsDice->append("HCPOAS");
-    godsDice->append("NMIQHU");
-    godsDice->append("SEOTIS");
-    godsDice->append("MTOICU");
-    godsDice->append("ENSIEU");
-    godsDice->append("OBBAOJ");
+    godsDice.append("LRYTTE");
+    godsDice.append("ANAEEG");
+    godsDice.append("AFPKFS");
+    godsDice.append("YLDEVR");
+    godsDice.append("VTHRWE");
+    godsDice.append("IDSYTT");
+    godsDice.append("XLDERI");
+    godsDice.append("ZNRNHL");
+    godsDice.append("EGHWNE");
+    godsDice.append("OATTOW");
+    godsDice.append("HCPOAS");
+    godsDice.append("NMIQHU");
+    godsDice.append("SEOTIS");
+    godsDice.append("MTOICU");
+    godsDice.append("ENSIEU");
+    godsDice.append("OBBAOJ");
 
     // FIXME: Gods Dice need to be shaken, so to say
 
     for (int i = 0; i < 16; i++)
-        this->dice->at(i / 4)->append(new Die((godsDice->at(i).at(rand() % 6)).toAscii()));
+        this->dice->at(i / 4)->append(new Die((godsDice.at(i).at(rand() % 6)).toAscii()));
 }
 
 DiceTray::~DiceTray()
 {
     // Is this needed, is it properly cleaning up all memory?
+    for (int i = 0; i < this->dice->size(); i++)
+    {
+        this->dice->at(i)->clear();
+        delete this->dice->at(i);
+    }
+
     this->dice->clear();
     delete this->dice;
 }

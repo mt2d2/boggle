@@ -31,5 +31,6 @@ void Lexicon::load()
 
 bool Lexicon::hasWord(QString val)
 {
+    // QStringList must implement binarySearch into contains; this is quite fast
     return this->dictionary->contains(val, Qt::CaseInsensitive);
 }

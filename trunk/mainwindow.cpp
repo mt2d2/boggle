@@ -16,29 +16,48 @@ MainWindow::MainWindow(QWidget *parent) :
     this->diceTray = NULL;
     this->lexicon = new Lexicon(":/dictionary.txt");
 
+    this->wordSearchThread = new WordSearchThread(this);
+
     // Make custom connections
     QObject::connect(m_ui->startButton, SIGNAL(clicked()), SLOT(onStartButtonClicked()));
     QObject::connect(this->timer, SIGNAL(timeout()), SLOT(onTimerCountdown()));
 }
 
+void MainWindow::closeEvent(QCloseEvent* evt)
+{
+    if (this->wordSearchThread != NULL && this->wordSearchThread->isRunning())
+    {
+        // This waits for the thread to finish its execution
+        // Ideally, we would exit straight away, but this CRASHES
+        this->wordSearchThread->wait();
+    }
+
+    evt->accept();
+}
+
 MainWindow::~MainWindow()
 {
-    delete this->diceTray;
-    delete this->m_ui;
     delete this->foundWords;
     delete this->wordsNotFound;
     delete this->lexicon;
     delete this->timer;
+    delete this->m_ui;
+
+    // The dice tray is destroyed when the game stops, but delete it jsut in case the
+    // user decides to quit before the game is stopped
+    if (this->diceTray != NULL)
+        delete this->diceTray;
 }
 
 void MainWindow::changeEvent(QEvent *e)
 {
-    switch(e->type()) {
-    case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
-        break;
-    default:
-        break;
+    switch(e->type())
+    {
+        case QEvent::LanguageChange:
+            m_ui->retranslateUi(this);
+            break;
+        default:
+            break;
     }
 }
 
@@ -127,8 +146,7 @@ void MainWindow::enableBlankBoard()
     m_ui->letter16->setText(QString(pieces->at(3)->at(3)->getLetter()));
 
     // Start searching for words
-    WordSearchThread* thread = new WordSearchThread(this);
-    thread->start();
+    this->wordSearchThread->start();
 }
 
 void MainWindow::resetBoard()
@@ -136,6 +154,10 @@ void MainWindow::resetBoard()
     // Reset the scores
     this->foundWords->clear();
     this->wordsNotFound->clear();
+
+    // Delete the old tray
+    delete this->diceTray;
+    this->diceTray = NULL;
 
     this->m_ui->gameStatus->setText(QString("<font color=\"black\">%1</font>").arg(tr("Press Start to begin the game...")));
 
@@ -187,6 +209,9 @@ void MainWindow::onTimerCountdown()
 
 void MainWindow::WordSearchThread::run()
 {
+    // Delete the thread when it's finished
+    QObject::connect(this, SIGNAL(finished()), this, SLOT(deleteLater()), Qt::QueuedConnection);
+
     for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
     {
         QString word = parent->lexicon->dictionary->at(i);
@@ -194,4 +219,6 @@ void MainWindow::WordSearchThread::run()
         if (parent->diceTray->stringFound(word))
             parent->wordsNotFound->append(word);
     }
+
+    exit();
 }
