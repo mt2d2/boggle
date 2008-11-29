@@ -14,3 +14,4 @@ HEADERS += mainwindow.h \
     lexicon.h
 FORMS += mainwindow.ui
 RESOURCES += files.qrc
+TRANSLATIONS += QtBoggle_de.ts
