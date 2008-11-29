@@ -213,9 +213,6 @@ void MainWindow::onTimerCountdown()
 
 void MainWindow::WordSearchThread::run()
 {
-    // Delete the thread when it's finished
-    // QObject::connect(this, SIGNAL(finished()), this, SLOT(deleteLater()), Qt::QueuedConnection);
-
     for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
     {
         QString word = parent->lexicon->dictionary->at(i);

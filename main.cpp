@@ -1,12 +1,23 @@
 #include <QtGui/QApplication>
+#include <QTranslator>
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication application(argc, argv);
 
-    MainWindow w;
-    w.show();
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_de", QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    application.installTranslator(&qtTranslator);
 
-    return a.exec();
+    QTranslator translator;
+    QString locale = QLocale::system().name();
+
+    translator.load("QtBoggle_de");
+    application.installTranslator(&translator);
+
+    MainWindow window;
+    window.show();
+
+    return application.exec();
 }
