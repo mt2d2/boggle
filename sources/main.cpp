@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include <QTranslator>
+
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -13,7 +14,7 @@ int main(int argc, char *argv[])
     qtTranslator.load("qt_" + locale, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     application.installTranslator(&qtTranslator);
     QTranslator appTranslator;
-    appTranslator.load("QtBoggle_" + locale);
+    appTranslator.load("translations/" + locale);
     application.installTranslator(&appTranslator);
 
     MainWindow window;
