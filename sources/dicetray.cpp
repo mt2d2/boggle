@@ -59,12 +59,12 @@ bool DiceTray::stringFound(QString search)
     search = search.toUpper();
     bool found = false;
 
-    for (int i = 0; i < this->dice->size(); i++)
+    for (int i = 0; i < 4; i++)
     {
-        for (int j = 0; j < this->dice->at(0)->size(); j++)
+        for (int j = 0; j < 4; j++)
         {
-            for (int m = 0; m < this->dice->size(); m++)
-                for (int n = 0; n < this->dice->at(0)->size(); n++)
+            for (int m = 0; m < 4; m++)
+                for (int n = 0; n < 4; n++)
                     this->dice->at(i)->at(j)->setMarked(false);
 
             if (search.at(0) == this->dice->at(i)->at(j)->getLetter())
