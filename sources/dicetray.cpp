@@ -5,10 +5,8 @@ DiceTray::DiceTray()
     // Create four QLists of QList<Die*>
     this->dice = new QList<QList<Die*>*>;
     for (int i = 0; i < 4; i++)
-    {
-        QList<Die*>* ptr = new QList<Die*>;
-        this->dice->append(ptr);
-    }
+        this->dice->append(new QList<Die*>);
+
     // Seed the generator, setup for randomness
     QStringList godsDice = QStringList();
     srand(QTime::currentTime().msec());
@@ -30,7 +28,8 @@ DiceTray::DiceTray()
     godsDice.append("ENSIEU");
     godsDice.append("OBBAOJ");
 
-    // FIXME: Gods Dice need to be shaken, so to say
+    // God's dice need to be shaken, so to say
+    std::random_shuffle(godsDice.begin(), godsDice.end());
 
     for (int i = 0; i < 16; i++)
         this->dice->at(i / 4)->append(new Die((godsDice.at(i).at(rand() % 6)).toAscii()));
@@ -38,7 +37,6 @@ DiceTray::DiceTray()
 
 DiceTray::~DiceTray()
 {
-    // Is this needed, is it properly cleaning up all memory?
     for (int i = 0; i < this->dice->size(); i++)
     {
         this->dice->at(i)->clear();
@@ -77,9 +75,7 @@ bool DiceTray::stringFound(QString search)
 
 bool DiceTray::stringFound(QString search, int row, int col)
 {
-    search = search.toUpper();
-
-    if (row < 0 || row > 3 || col < 0 || col > 3)
+    if (row < 0 || row >= 4 || col < 0 || col >= 4)
         return false;
     else if (this->dice->at(row)->at(col)->isMarked())
         return false;
