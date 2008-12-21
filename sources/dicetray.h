@@ -3,6 +3,7 @@
 
 #include <QtCore>
 #include <stdlib.h>
+#include <algorithm>
 
 #include "die.h"
 
