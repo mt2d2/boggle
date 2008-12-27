@@ -15,3 +15,7 @@ HEADERS += sources/mainwindow.h \
 FORMS += sources/mainwindow.ui
 RESOURCES += resources/files.qrc
 TRANSLATIONS += translations/de.ts
+
+
+QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
+CONFIG += x86 ppc
