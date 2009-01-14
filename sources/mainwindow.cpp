@@ -7,6 +7,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            QLabel* label = new QLabel("_");
+            label->setFont(QFont("Serif", 20, QFont::Bold));
+            label->setAlignment(Qt::AlignCenter);
+
+            this->m_ui->piecesLayout->addWidget(label, i, j);
+        }
+    }
+
     // Setup instance fields
     this->isGameRunning = false;
     this->timer = new QTimer(this);
@@ -129,25 +142,14 @@ void MainWindow::enableBlankBoard()
     this->diceTray = new DiceTray();
     QList<QList<Die*>*>* pieces = this->diceTray->getTray();
 
-    m_ui->letter1->setText(QString(pieces->at(0)->at(0)->getLetter()));
-    m_ui->letter2->setText(QString(pieces->at(0)->at(1)->getLetter()));
-    m_ui->letter3->setText(QString(pieces->at(0)->at(2)->getLetter()));
-    m_ui->letter4->setText(QString(pieces->at(0)->at(3)->getLetter()));
-
-    m_ui->letter5->setText(QString(pieces->at(1)->at(0)->getLetter()));
-    m_ui->letter6->setText(QString(pieces->at(1)->at(1)->getLetter()));
-    m_ui->letter7->setText(QString(pieces->at(1)->at(2)->getLetter()));
-    m_ui->letter8->setText(QString(pieces->at(1)->at(3)->getLetter()));
-
-    m_ui->letter9->setText(QString(pieces->at(2)->at(0)->getLetter()));
-    m_ui->letter10->setText(QString(pieces->at(2)->at(1)->getLetter()));
-    m_ui->letter11->setText(QString(pieces->at(2)->at(2)->getLetter()));
-    m_ui->letter12->setText(QString(pieces->at(2)->at(3)->getLetter()));
-
-    m_ui->letter13->setText(QString(pieces->at(3)->at(0)->getLetter()));
-    m_ui->letter14->setText(QString(pieces->at(3)->at(1)->getLetter()));
-    m_ui->letter15->setText(QString(pieces->at(3)->at(2)->getLetter()));
-    m_ui->letter16->setText(QString(pieces->at(3)->at(3)->getLetter()));
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            QLabel* label = dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget());
+            label->setText(QString(pieces->at(i)->at(j)->getLetter()));
+        }
+    }
 
     // Start searching for words
     this->wordSearchThread->start();
@@ -174,25 +176,14 @@ void MainWindow::resetBoard()
      m_ui->startButton->setFocus();
 
     // Reset all the letters
-    m_ui->letter1->setText("_");
-    m_ui->letter2->setText("_");
-    m_ui->letter3->setText("_");
-    m_ui->letter4->setText("_");
-
-    m_ui->letter5->setText("_");
-    m_ui->letter6->setText("_");
-    m_ui->letter7->setText("_");
-    m_ui->letter8->setText("_");
-
-    m_ui->letter9->setText("_");
-    m_ui->letter10->setText("_");
-    m_ui->letter11->setText("_");
-    m_ui->letter12->setText("_");
-
-    m_ui->letter13->setText("_");
-    m_ui->letter14->setText("_");
-    m_ui->letter15->setText("_");
-    m_ui->letter16->setText("_");
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            QLabel* label = dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget());
+            label->setText("_");
+        }
+    }
 }
 
 void MainWindow::onTimerCountdown()
