@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
-<defaultcodec></defaultcodec>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="208"/>
+        <location filename="../sources/mainwindow.cpp" line="199"/>
         <source>Time remaining: %1</source>
         <translation>Übrige Zeite: %1</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="121"/>
+        <location filename="../sources/mainwindow.cpp" line="134"/>
         <source>Stop</source>
         <translation>Aufhören</translation>
     </message>
@@ -24,18 +23,13 @@
         <translation>Beginnen</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.ui" line="418"/>
+        <location filename="../sources/mainwindow.ui" line="98"/>
         <source>Enter words seperated by one space...</source>
         <translation>﻿Bitte geben Sie Wörter ein, die durch ein Leerzeichen abgetrennt werden...</translation>
     </message>
     <message>
         <location filename="../sources/mainwindow.ui" line="26"/>
         <source>Boggle</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../sources/mainwindow.ui" line="396"/>
-        <source>_</source>
         <translation></translation>
     </message>
 </context>

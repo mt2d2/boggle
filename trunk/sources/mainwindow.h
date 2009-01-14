@@ -7,7 +7,8 @@
 #include "dicetray.h"
 #include "lexicon.h"
 
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
 
@@ -19,12 +20,6 @@ class MainWindow : public QDialog
 public:
     explicit MainWindow(QWidget *parent = 0);
     virtual ~MainWindow();
-
-    // TODO: These shouldn't be public
-    DiceTray* diceTray;
-    Lexicon* lexicon;
-    QStringList* foundWords;
-    QStringList* wordsNotFound;
 
 public slots:
     void onStartButtonClicked();
@@ -40,7 +35,12 @@ private:
     void enableBlankBoard();
     void resetBoard();
 
-    Ui::MainWindow *m_ui;
+    DiceTray* diceTray;
+    Lexicon* lexicon;
+    QStringList* foundWords;
+    QStringList* wordsNotFound;
+
+    Ui::MainWindow* m_ui;
     bool isGameRunning;
     QTimer* timer;
     int time;
