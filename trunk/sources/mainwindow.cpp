@@ -1,19 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QDialog(parent),
-    m_ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QDialog(parent), m_ui(new Ui::MainWindow)
 {
     m_ui->setupUi(this);
 
-
+    // Set up the pieces layout manually
+    // This cuts down on the huge amounts of redundant code
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
             QLabel* label = new QLabel("_");
-            label->setFont(QFont("Serif", 20, QFont::Bold));
+            label->setFont(QFont("", 18, QFont::Bold));
             label->setAlignment(Qt::AlignCenter);
 
             this->m_ui->piecesLayout->addWidget(label, i, j);
@@ -49,6 +48,11 @@ void MainWindow::closeEvent(QCloseEvent* evt)
 
 MainWindow::~MainWindow()
 {
+    // Destroy the labels
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            delete this->m_ui->piecesLayout->itemAtPosition(i, j)->widget();
+
     delete this->foundWords;
     delete this->wordsNotFound;
     delete this->lexicon;
@@ -211,6 +215,4 @@ void MainWindow::WordSearchThread::run()
         if (parent->diceTray->stringFound(word))
             parent->wordsNotFound->append(word);
     }
-
-    exit();
 }
