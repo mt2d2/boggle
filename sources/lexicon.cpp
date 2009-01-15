@@ -25,11 +25,7 @@ void Lexicon::load()
     while (! in.atEnd())
        this->dictionary->append(in.readLine());
 
-    // Sort out the dictionary
-    this->dictionary->sort();
-
-    // THIS NEEDS TO BE STORED IN BINARY ON THE DISK
-    // AS A QStringList
+    file.close();
 }
 
 bool Lexicon::hasWord(QString val)
