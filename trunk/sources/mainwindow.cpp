@@ -110,9 +110,14 @@ void MainWindow::stopGame()
         }
     }
 
-    // Remove all correctly found words
-    for (int i = 0; i < this->foundWords->size(); i++)
-        this->wordsNotFound->removeAll(this->foundWords->at(i));
+//    // Remove all correctly found words
+//    for (int i = 0; i < this->foundWords->size(); i++)
+//        this->wordsNotFound->removeAll(this->foundWords->at(i));
+// There's a decision to be made. The first is faster, but I think
+// aside from ugly C++ extras, this is more readable.
+
+    foreach (const QString &s, *this->foundWords)
+        this->wordsNotFound->removeAll(s);
 
     QMessageBox msgBox(this);
     msgBox.setText("Valid words: " + this->foundWords->join(", ") + "\nWords not found: " + this->wordsNotFound->join(", "));
