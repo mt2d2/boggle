@@ -1,4 +1,5 @@
 #include "dicetray.h"
+#include <algorithm> // For std::random_shuffle
 
 DiceTray::DiceTray()
 {
@@ -30,19 +31,13 @@ DiceTray::DiceTray()
 
     // God's dice need to be shaken, so to say
     std::random_shuffle(godsDice.begin(), godsDice.end());
-
+            
     for (int i = 0; i < 16; i++)
         this->dice->at(i / 4)->append(new Die((godsDice.at(i).at(rand() % 6)).toAscii()));
 }
 
 DiceTray::~DiceTray()
 {
-    for (int i = 0; i < this->dice->size(); i++)
-    {
-        this->dice->at(i)->clear();
-        delete this->dice->at(i);
-    }
-
     this->dice->clear();
     delete this->dice;
 }
@@ -61,9 +56,7 @@ bool DiceTray::stringFound(QString search)
     {
         for (int j = 0; j < 4; j++)
         {
-            for (int m = 0; m < 4; m++)
-                for (int n = 0; n < 4; n++)
-                    this->dice->at(i)->at(j)->setMarked(false);
+            this->dice->at(i)->at(j)->setMarked(false);
 
             if (search.at(0) == this->dice->at(i)->at(j)->getLetter())
                 found = found || this->stringFound(search, i, j);

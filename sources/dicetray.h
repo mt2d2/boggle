@@ -2,9 +2,6 @@
 #define DICETRAY_H
 
 #include <QtCore>
-#include <stdlib.h>
-#include <algorithm>
-
 #include "die.h"
 
 class DiceTray
@@ -17,7 +14,6 @@ class DiceTray
 
     private:
         bool stringFound(QString search, int row, int col);
-
         QList<QList<Die*>*>* dice;
 };
 
