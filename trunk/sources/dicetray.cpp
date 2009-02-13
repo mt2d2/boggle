@@ -31,9 +31,16 @@ DiceTray::DiceTray()
 
     // God's dice need to be shaken, so to say
     std::random_shuffle(godsDice.begin(), godsDice.end());
-            
-    for (int i = 0; i < 16; i++)
-        this->dice->at(i / 4)->append(new Die((godsDice.at(i).at(rand() % 6)).toAscii()));
+
+    // Assign game pieces, and delete temporary dice
+    for (int row = 0; row < 4; row++)
+    {
+        for (int col = 0; col < 4; col++)
+        {
+            this->dice->at(row)->append(new Die((godsDice.at(0).at(rand() % 6)).toAscii()));
+            godsDice.removeAt(0);
+        }
+    }
 }
 
 DiceTray::~DiceTray()
@@ -68,7 +75,7 @@ bool DiceTray::stringFound(QString search)
 
 bool DiceTray::stringFound(QString search, int row, int col)
 {
-    if (row < 0 || row >= 4 || col < 0 || col >= 4)
+    if (row < 0 || row > 3 || col < 0 || col > 3)
         return false;
     else if (this->dice->at(row)->at(col)->isMarked())
         return false;
