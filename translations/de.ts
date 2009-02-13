@@ -7,8 +7,9 @@
         <location filename="../sources/mainwindow.cpp" line="113"/>
         <source>Vald words: %1
 Words not found: %2</source>
+        <translatorcomment>Darf ich so benutzt &quot;ungültig&quot; benutzen? Würde es besser gehen, ob ich passive Sätze benuzten würde?</translatorcomment>
         <translation>Gültige Wörter:%1
-Wörter, die nicht gefunden wurden:%2</translation>
+Ungültige Wörter:%2</translation>
     </message>
     <message>
         <location filename="../sources/mainwindow.cpp" line="130"/>
@@ -42,7 +43,8 @@ Wörter, die nicht gefunden wurden:%2</translation>
     <message>
         <location filename="../sources/mainwindow.ui" line="26"/>
         <source>Boggle</source>
-        <translation></translation>
+        <translatorcomment>Ich weiß eigentlich nicht, wie ich dieses Spiel nennen kann.</translatorcomment>
+        <translation>Boggle</translation>
     </message>
 </context>
 </TS>
