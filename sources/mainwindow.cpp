@@ -48,19 +48,14 @@ void MainWindow::closeEvent(QCloseEvent* evt)
 
 MainWindow::~MainWindow()
 {
-    // Destroy the labels
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            delete this->m_ui->piecesLayout->itemAtPosition(i, j)->widget();
-
     delete this->foundWords;
     delete this->wordsNotFound;
+    delete this->wordSearchThread;
     delete this->lexicon;
     delete this->timer;
     delete this->m_ui;
-    delete this->wordSearchThread;
 
-    // The dice tray is destroyed when the game stops, but delete it jsut in case the
+    // The dice tray is destroyed when the game stops, but delete it just in case the
     // user decides to quit before the game is stopped
     if (this->diceTray != NULL)
         delete this->diceTray;
@@ -104,23 +99,18 @@ void MainWindow::stopGame()
     {
         for (int i = 0; i < enteredWords.size(); i++)
         {
-            QString wordToTest = enteredWords.at(i).toLower();
+            QString wordToTest = enteredWords.at(i);
             if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
                 this->foundWords->append(wordToTest);
         }
     }
 
-//    // Remove all correctly found words
-//    for (int i = 0; i < this->foundWords->size(); i++)
-//        this->wordsNotFound->removeAll(this->foundWords->at(i));
-// There's a decision to be made. The first is faster, but I think
-// aside from ugly C++ extras, this is more readable.
-
-    foreach (const QString &s, *this->foundWords)
-        this->wordsNotFound->removeAll(s);
+     // Remove all correctly found words
+    for (int i = 0; i < this->foundWords->size(); i++)
+        this->wordsNotFound->removeAll(this->foundWords->at(i));
 
     QMessageBox msgBox(this);
-    msgBox.setText("Valid words: " + this->foundWords->join(", ") + "\nWords not found: " + this->wordsNotFound->join(", "));
+    msgBox.setText(tr("Vald words: %1\nWords not found: %2").arg(this->foundWords->join(", ")).arg(this->wordsNotFound->join(", ")));
     msgBox.exec();
 
     this->resetBoard();
@@ -152,13 +142,8 @@ void MainWindow::enableBlankBoard()
     QList<QList<Die*>*>* pieces = this->diceTray->getTray();
 
     for (int i = 0; i < 4; i++)
-    {
         for (int j = 0; j < 4; j++)
-        {
-            QLabel* label = dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget());
-            label->setText(QString(pieces->at(i)->at(j)->getLetter()));
-        }
-    }
+            (dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(QString(pieces->at(i)->at(j)->getLetter()));
 
     // Start searching for words
     this->wordSearchThread->start();
@@ -186,13 +171,8 @@ void MainWindow::resetBoard()
 
     // Reset all the letters
     for (int i = 0; i < 4; i++)
-    {
         for (int j = 0; j < 4; j++)
-        {
-            QLabel* label = dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget());
-            label->setText("_");
-        }
-    }
+            (dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText("_");
 }
 
 void MainWindow::onTimerCountdown()
