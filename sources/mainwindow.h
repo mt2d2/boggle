@@ -32,7 +32,7 @@ protected:
 private:
     void startGame();
     void stopGame();
-    void enableBlankBoard();
+    void newBoard();
     void resetBoard();
 
     DiceTray* diceTray;
@@ -40,7 +40,7 @@ private:
     QStringList* foundWords;
     QStringList* wordsNotFound;
 
-    Ui::MainWindow* m_ui;
+    Ui::MainWindow* ui;
     bool isGameRunning;
     QTimer* timer;
     int time;

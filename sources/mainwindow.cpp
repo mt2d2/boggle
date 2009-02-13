@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QDialog(parent), m_ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QDialog(parent), ui(new Ui::MainWindow)
 {
-    m_ui->setupUi(this);
+    ui->setupUi(this);
 
     // Set up the pieces layout manually
     // This cuts down on the huge amounts of redundant code
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QDialog(parent), m_ui(new Ui::MainWind
             label->setFont(QFont("", 18, QFont::Bold));
             label->setAlignment(Qt::AlignCenter);
 
-            this->m_ui->piecesLayout->addWidget(label, i, j);
+            this->ui->piecesLayout->addWidget(label, i, j);
         }
     }
 
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QDialog(parent), m_ui(new Ui::MainWind
     this->wordSearchThread = new WordSearchThread(this);
 
     // Make custom connections
-    QObject::connect(m_ui->startButton, SIGNAL(clicked()), SLOT(onStartButtonClicked()));
+    QObject::connect(ui->startButton, SIGNAL(clicked()), SLOT(onStartButtonClicked()));
     QObject::connect(this->timer, SIGNAL(timeout()), SLOT(onTimerCountdown()));
 }
 
@@ -53,7 +53,7 @@ MainWindow::~MainWindow()
     delete this->wordSearchThread;
     delete this->lexicon;
     delete this->timer;
-    delete this->m_ui;
+    delete this->ui;
 
     // The dice tray is destroyed when the game stops, but delete it just in case the
     // user decides to quit before the game is stopped
@@ -66,7 +66,7 @@ void MainWindow::changeEvent(QEvent *e)
     switch(e->type())
     {
         case QEvent::LanguageChange:
-            m_ui->retranslateUi(this);
+            ui->retranslateUi(this);
             break;
         default:
             break;
@@ -78,8 +78,8 @@ void MainWindow::startGame()
     isGameRunning = !isGameRunning;
 
     // Start the game!
-    this->enableBlankBoard();
-    this->time = 180;   // 180 (3 minutes)
+    this->newBoard();
+    this->time = 180; // 180 (3 minutes)
     this->timer->start(1000);
 }
 
@@ -94,7 +94,7 @@ void MainWindow::stopGame()
     // Stop
     this->timer->stop();
 
-    QStringList enteredWords = this->m_ui->wordEdit->toPlainText().split(" ");
+    QStringList enteredWords = this->ui->wordEdit->toPlainText().split(" ");
     if (enteredWords.at(0) != "")
     {
         for (int i = 0; i < enteredWords.size(); i++)
@@ -105,7 +105,7 @@ void MainWindow::stopGame()
         }
     }
 
-     // Remove all correctly found words
+    // Remove all correctly found words
     for (int i = 0; i < this->foundWords->size(); i++)
         this->wordsNotFound->removeAll(this->foundWords->at(i));
 
@@ -124,18 +124,18 @@ void MainWindow::onStartButtonClicked()
         this->startGame();
 }
 
-void MainWindow::enableBlankBoard()
+void MainWindow::newBoard()
 {
     // Start the timer
-    m_ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg("3:00"));
+    this->ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg("3:00"));
 
     // Change the start button
-    m_ui->startButton->setText(tr("Stop"));
+    this->ui->startButton->setText(tr("Stop"));
 
     // Empty and enable the entry field
-    m_ui->wordEdit->setPlainText("");
-    m_ui->wordEdit->setEnabled(true);
-    m_ui->wordEdit->setFocus();
+    this->ui->wordEdit->setPlainText("");
+    this->ui->wordEdit->setEnabled(true);
+    this->ui->wordEdit->setFocus();
 
     // Label each game piece from diceTray
     this->diceTray = new DiceTray();
@@ -143,7 +143,7 @@ void MainWindow::enableBlankBoard()
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            (dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(QString(pieces->at(i)->at(j)->getLetter()));
+            (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(QString(pieces->at(i)->at(j)->getLetter()));
 
     // Start searching for words
     this->wordSearchThread->start();
@@ -159,20 +159,20 @@ void MainWindow::resetBoard()
     delete this->diceTray;
     this->diceTray = NULL;
 
-    this->m_ui->gameStatus->setText(QString("<font color=\"black\">%1</font>").arg(tr("Press Start to begin the game...")));
+    this->ui->gameStatus->setText(QString("<font color=\"black\">%1</font>").arg(tr("Press Start to begin the game...")));
 
     // Change the start button
-    m_ui->startButton->setText(tr("Start"));
+    this->ui->startButton->setText(tr("Start"));
 
     // Empty and enable the entry field
-    m_ui->wordEdit->setPlainText(tr("Enter words seperated by one space..."));
-    m_ui->wordEdit->setEnabled(false);
-     m_ui->startButton->setFocus();
+    this->ui->wordEdit->setPlainText(tr("Enter words seperated by one space..."));
+    this->ui->wordEdit->setEnabled(false);
+    this->ui->startButton->setFocus();
 
     // Reset all the letters
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            (dynamic_cast<QLabel*>(this->m_ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText("_");
+            (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText("_");
 }
 
 void MainWindow::onTimerCountdown()
@@ -185,10 +185,10 @@ void MainWindow::onTimerCountdown()
     QString minutes = QString("%1").arg((time / 60));
     QString seconds = (time % 60 == 0) ? "00" :  (time % 60 < 10) ? QString("0%1").arg(time % 60) : QString("%1").arg(time % 60);
 
-    this->m_ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg(minutes + ":" + seconds ));
+    this->ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg(minutes + ":" + seconds ));
 
     if (this->time <= 60)
-        this->m_ui->gameStatus->setText(QString("<font color=\"red\">%1</font>").arg(this->m_ui->gameStatus->text()));
+        this->ui->gameStatus->setText(QString("<font color=\"red\">%1</font>").arg(this->ui->gameStatus->text()));
 }
 
 void MainWindow::WordSearchThread::run()
@@ -201,3 +201,4 @@ void MainWindow::WordSearchThread::run()
             parent->wordsNotFound->append(word);
     }
 }
+
