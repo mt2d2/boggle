@@ -11,41 +11,53 @@ Words not found: %2</source>
 Ungültige Wörter: %2</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="117"/>
         <source>Score: %1
 Valid words: %2
 Invalid Words: %3
 Words not found: %4</source>
-        <translation>Punkzahl: %1
+        <translation type="obsolete">Punkzahl: %1
 Gültige Wörter: %2
 Ungültige Wörter: %3
 Wörter, die nicht gefunden wurden: %4</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="134"/>
-        <location filename="../sources/mainwindow.cpp" line="192"/>
+        <location filename="../sources/mainwindow.cpp" line="118"/>
+        <source>Score: %1
+Valid words: %2
+Invalid Words: %3
+
+Words not found: %4</source>
+        <translation>Punkzahl: %1
+Gültige Wörter: %2
+Ungültige Wörter: %3
+
+Wörter, die nicht gefunden wurden: %4</translation>
+    </message>
+    <message>
+        <location filename="../sources/mainwindow.cpp" line="135"/>
+        <location filename="../sources/mainwindow.cpp" line="194"/>
         <source>Time remaining: %1</source>
         <translation>Übrige Zeite: %1</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="137"/>
+        <location filename="../sources/mainwindow.cpp" line="138"/>
         <source>Stop</source>
         <translation>Aufhören</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="166"/>
+        <location filename="../sources/mainwindow.cpp" line="168"/>
         <location filename="../sources/mainwindow.ui" line="48"/>
         <source>Press Start to begin the game...</source>
         <translation>﻿Drucken Sie Beginnen, um anzufangen...</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="169"/>
+        <location filename="../sources/mainwindow.cpp" line="171"/>
         <location filename="../sources/mainwindow.ui" line="71"/>
         <source>Start</source>
         <translation>Beginnen</translation>
     </message>
     <message>
-        <location filename="../sources/mainwindow.cpp" line="172"/>
+        <location filename="../sources/mainwindow.cpp" line="174"/>
         <location filename="../sources/mainwindow.ui" line="98"/>
         <source>Enter words seperated by one space...</source>
         <translation>﻿Bitte geben Sie Wörter ein, die durch ein Leerzeichen abgetrennt werden...</translation>

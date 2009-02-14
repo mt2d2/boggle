@@ -98,23 +98,24 @@ void MainWindow::stopGame()
 
     QStringList enteredWords = this->ui->wordEdit->toPlainText().split(" ");
     enteredWords.removeAll("");
+    enteredWords.removeAll("\n");
 
-        for (int i = 0; i < enteredWords.size(); i++)
-        {
-            QString wordToTest = enteredWords.at(i);
+    for (int i = 0; i < enteredWords.size(); i++)
+    {
+        QString wordToTest = enteredWords.at(i);
 
-            if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
-                this->correctWords->append(wordToTest);
-            else
-                this->incorrectWords->append(wordToTest);
-        }
+        if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
+            this->correctWords->append(wordToTest);
+        else
+           this->incorrectWords->append(wordToTest);
+    }
 
     // Remove all correctly found words
     for (int i = 0; i < this->correctWords->size(); i++)
         this->wordsNotFound->removeAll(this->correctWords->at(i));
 
     QMessageBox msgBox(this);
-    msgBox.setText(tr("Score: %1\nValid words: %2\nInvalid Words: %3\nWords not found: %4").arg(this->computeWordScore()).arg(this->correctWords->join(", ")).arg(this->incorrectWords->join(", ")).arg(this->wordsNotFound->join(", ")));
+    msgBox.setText(tr("Score: %1\nValid words: %2\nInvalid Words: %3\n\nWords not found: %4").arg(this->computeWordScore()).arg(this->correctWords->join(", ")).arg(this->incorrectWords->join(", ")).arg(this->wordsNotFound->join(", ")));
     msgBox.exec();
 
     this->resetBoard();
@@ -157,6 +158,7 @@ void MainWindow::resetBoard()
 {
     // Reset the scores
     this->correctWords->clear();
+    this->incorrectWords->clear();
     this->wordsNotFound->clear();
 
     // Delete the old tray
