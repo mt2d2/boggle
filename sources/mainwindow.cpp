@@ -97,8 +97,8 @@ void MainWindow::stopGame()
     this->timer->stop();
 
     QStringList enteredWords = this->ui->wordEdit->toPlainText().split(" ");
-    if (enteredWords.at(0) != "")
-    {
+    enteredWords.removeAll("");
+
         for (int i = 0; i < enteredWords.size(); i++)
         {
             QString wordToTest = enteredWords.at(i);
@@ -108,14 +108,13 @@ void MainWindow::stopGame()
             else
                 this->incorrectWords->append(wordToTest);
         }
-    }
 
     // Remove all correctly found words
     for (int i = 0; i < this->correctWords->size(); i++)
         this->wordsNotFound->removeAll(this->correctWords->at(i));
 
     QMessageBox msgBox(this);
-    msgBox.setText(tr("Score: %1\nVald words: %2\nWords not found: %3").arg(this->computeWordScore()).arg(this->correctWords->join(", ")).arg(this->wordsNotFound->join(", ")));
+    msgBox.setText(tr("Score: %1\nValid words: %2\nInvalid Words: %3\nWords not found: %4").arg(this->computeWordScore()).arg(this->correctWords->join(", ")).arg(this->incorrectWords->join(", ")).arg(this->wordsNotFound->join(", ")));
     msgBox.exec();
 
     this->resetBoard();
