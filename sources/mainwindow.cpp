@@ -96,20 +96,20 @@ void MainWindow::stopGame()
     // Stop
     this->timer->stop();
 
-    QStringList enteredWords = this->ui->wordEdit->toPlainText().split(" ");
-    enteredWords.removeAll("");
-    enteredWords.removeAll("\n");
+    QStringList enteredWords = this->ui->wordEdit->toPlainText().simplified().split(" ");
 
-    for (int i = 0; i < enteredWords.size(); i++)
+    if (enteredWords.at(0) != "")
     {
-        QString wordToTest = enteredWords.at(i);
+        for (int i = 0; i < enteredWords.size(); i++)
+        {
+            QString wordToTest = enteredWords.at(i);
 
-        if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
-            this->correctWords->append(wordToTest);
-        else
-           this->incorrectWords->append(wordToTest);
+            if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
+                this->correctWords->append(wordToTest);
+            else
+               this->incorrectWords->append(wordToTest);
+        }
     }
-
     // Remove all correctly found words
     for (int i = 0; i < this->correctWords->size(); i++)
         this->wordsNotFound->removeAll(this->correctWords->at(i));
