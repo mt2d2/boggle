@@ -13,7 +13,7 @@ class DiceTray
         bool stringFound(QString search);
 
     private:
-        bool stringFound(QString search, int row, int col);
+        bool stringFound(const QString& search, int row, int col);
         QList<QList<Die*>*>* dice;
 };
 

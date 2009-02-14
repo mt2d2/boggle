@@ -65,7 +65,7 @@ bool DiceTray::stringFound(QString search)
         {
             this->dice->at(i)->at(j)->setMarked(false);
 
-            if (search.at(0) == this->dice->at(i)->at(j)->getLetter())
+            if ((search.at(0)) == this->dice->at(i)->at(j)->getLetter())
                 found = found || this->stringFound(search, i, j);
         }
     }
@@ -73,7 +73,7 @@ bool DiceTray::stringFound(QString search)
     return found;
 }
 
-bool DiceTray::stringFound(QString search, int row, int col)
+bool DiceTray::stringFound(const QString& search, int row, int col)
 {
     if (row < 0 || row > 3 || col < 0 || col > 3)
         return false;
@@ -87,14 +87,14 @@ bool DiceTray::stringFound(QString search, int row, int col)
     {
         bool check = false;
 
-        for (int m = -1; m <= 1; m++)
+        for (int i = -1; i <= 1; i++)
         {
-            for (int n = -1; n <= 1; n++)
+            for (int j = -1; j <= 1; j++)
             {
-                if (m != 0 || n != 0)
+                if (i != 0 || j != 0)
                 {
                     this->dice->at(row)->at(col)->setMarked(true);
-                    check = check || this->stringFound(search.mid(1), row + m, col + n);
+                    check = check || this->stringFound(search.mid(1), row + i, col + j);
                 }
             }
         }

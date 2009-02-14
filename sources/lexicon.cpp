@@ -1,6 +1,6 @@
 #include "lexicon.h"
 
-Lexicon::Lexicon(QString path)
+Lexicon::Lexicon(const QString& path)
 {
     this->filePath = path;
     this->dictionary = new QStringList();
@@ -28,7 +28,7 @@ void Lexicon::load()
     file.close();
 }
 
-bool Lexicon::hasWord(QString& val)
+bool Lexicon::hasWord(const QString& val)
 {
     // QStringList must implement binarySearch into contains; this is quite fast
     return this->dictionary->contains(val, Qt::CaseInsensitive);
