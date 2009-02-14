@@ -65,7 +65,7 @@ bool DiceTray::stringFound(QString search)
         {
             this->dice->at(i)->at(j)->setMarked(false);
 
-            if ((search.at(0)) == this->dice->at(i)->at(j)->getLetter())
+            if (search.at(0) == this->dice->at(i)->at(j)->getLetter())
                 found = found || this->stringFound(search, i, j);
         }
     }
