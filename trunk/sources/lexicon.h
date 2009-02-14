@@ -6,9 +6,9 @@
 class Lexicon
 {
     public:
-        Lexicon(QString val);
+        Lexicon(const QString& val);
         ~Lexicon();
-        bool hasWord(QString& val);
+        bool hasWord(const QString& val);
         QStringList* dictionary;
     private:
         void load();
