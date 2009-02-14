@@ -3,7 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QDialog(parent), ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    this->ui->setupUi(this);
 
     // Set up the pieces layout manually
     // This cuts down on the huge amounts of redundant code
@@ -23,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent) : QDialog(parent), ui(new Ui::MainWindow
     this->isGameRunning = false;
     this->timer = new QTimer(this);
     this->time = 0;
-    this->foundWords = new QStringList();
+    this->correctWords = new QStringList();
+    this->incorrectWords = new QStringList();
     this->wordsNotFound = new QStringList();
     this->diceTray = NULL;
     this->lexicon = new Lexicon(":/dictionary.txt");
@@ -48,7 +49,8 @@ void MainWindow::closeEvent(QCloseEvent* evt)
 
 MainWindow::~MainWindow()
 {
-    delete this->foundWords;
+    delete this->correctWords;
+    delete this->incorrectWords;
     delete this->wordsNotFound;
     delete this->wordSearchThread;
     delete this->lexicon;
@@ -100,17 +102,20 @@ void MainWindow::stopGame()
         for (int i = 0; i < enteredWords.size(); i++)
         {
             QString wordToTest = enteredWords.at(i);
+
             if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
-                this->foundWords->append(wordToTest);
+                this->correctWords->append(wordToTest);
+            else
+                this->incorrectWords->append(wordToTest);
         }
     }
 
     // Remove all correctly found words
-    for (int i = 0; i < this->foundWords->size(); i++)
-        this->wordsNotFound->removeAll(this->foundWords->at(i));
+    for (int i = 0; i < this->correctWords->size(); i++)
+        this->wordsNotFound->removeAll(this->correctWords->at(i));
 
     QMessageBox msgBox(this);
-    msgBox.setText(tr("Vald words: %1\nWords not found: %2").arg(this->foundWords->join(", ")).arg(this->wordsNotFound->join(", ")));
+    msgBox.setText(tr("Score: %1\nVald words: %2\nWords not found: %3").arg(this->computeWordScore()).arg(this->correctWords->join(", ")).arg(this->wordsNotFound->join(", ")));
     msgBox.exec();
 
     this->resetBoard();
@@ -152,7 +157,7 @@ void MainWindow::newBoard()
 void MainWindow::resetBoard()
 {
     // Reset the scores
-    this->foundWords->clear();
+    this->correctWords->clear();
     this->wordsNotFound->clear();
 
     // Delete the old tray
@@ -202,3 +207,37 @@ void MainWindow::WordSearchThread::run()
     }
 }
 
+int MainWindow::computeWordScore()
+{
+    int score = 0;
+
+    for (int i = 0; i < this->correctWords->size(); i++)
+    {
+        if (this->correctWords->at(i).length() <= 4)
+            score += 1;
+        else if (this->correctWords->at(i).length() == 5)
+            score += 2;
+        else if (this->correctWords->at(i).length() == 6)
+            score += 3;
+        else if (this->correctWords->at(i).length() >= 7 && this->correctWords->at(i).length() <= 10)
+            score += 5;
+        else if (this->correctWords->at(i).length() >= 11)
+            score += 8;
+    }
+
+    for (int i = 0; i < this->incorrectWords->size(); i++)
+    {
+        if (this->incorrectWords->at(i).length() <= 4)
+            score -= 1;
+        else if (this->incorrectWords->at(i).length() == 5)
+            score -= 2;
+        else if (this->incorrectWords->at(i).length() == 6)
+            score -= 3;
+        else if (this->incorrectWords->at(i).length() >= 7 && this->incorrectWords->at(i).length() <= 10)
+            score -= 5;
+        else if (this->incorrectWords->at(i).length() >= 11)
+            score -= 8;
+    }
+
+    return score;
+}

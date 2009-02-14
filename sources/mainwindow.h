@@ -34,10 +34,12 @@ private:
     void stopGame();
     void newBoard();
     void resetBoard();
+    int computeWordScore();
 
     DiceTray* diceTray;
     Lexicon* lexicon;
-    QStringList* foundWords;
+    QStringList* incorrectWords;
+    QStringList* correctWords;
     QStringList* wordsNotFound;
 
     Ui::MainWindow* ui;
