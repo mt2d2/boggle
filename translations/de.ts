@@ -8,8 +8,8 @@
         <source>Vald words: %1
 Words not found: %2</source>
         <translatorcomment>Darf ich so benutzt &quot;ungültig&quot; benutzen? Würde es besser gehen, ob ich passive Sätze benuzten würde?</translatorcomment>
-        <translation>Gültige Wörter:%1
-Ungültige Wörter:%2</translation>
+        <translation>Gültige Wörter: %1
+Ungültige Wörter: %2</translation>
     </message>
     <message>
         <location filename="../sources/mainwindow.cpp" line="130"/>
