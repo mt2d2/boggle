@@ -16,6 +16,7 @@ FORMS += sources/mainwindow.ui
 RESOURCES += resources/files.qrc
 TRANSLATIONS += translations/de.ts
 
-
 QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
 CONFIG += x86 ppc
+#CONFIG += x86 ppc x86_64 ppc64
+#CONFIG -= app_bundle

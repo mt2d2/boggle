@@ -57,15 +57,17 @@ QList<QList<Die*>*>* DiceTray::getTray()
 bool DiceTray::stringFound(QString search)
 {
     search = search.toUpper();
+    QChar firstLetterOfSearch = search.at(0);
     bool found = false;
 
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            this->dice->at(i)->at(j)->setMarked(false);
+            Die* die = this->dice->at(i)->at(j);
+            die->setMarked(false);
 
-            if (search.at(0) == this->dice->at(i)->at(j)->getLetter())
+            if (firstLetterOfSearch == die->getLetter())
                 found = found || this->stringFound(search, i, j);
         }
     }
@@ -77,27 +79,30 @@ bool DiceTray::stringFound(const QString& search, int row, int col)
 {
     if (row < 0 || row > 3 || col < 0 || col > 3)
         return false;
-    else if (this->dice->at(row)->at(col)->isMarked())
+
+    // Get some constants
+    Die* die = this->dice->at(row)->at(col);
+    QChar diceLetter = die->getLetter();
+    QChar firstLetterOfSearch = search.at(0);
+
+    if (die->isMarked())
         return false;
-    else if (search.at(0) != this->dice->at(row)->at(col)->getLetter())
+    else if (firstLetterOfSearch != diceLetter)
         return false;
-    else if (search.length() == 1 && search.at(0) == this->dice->at(row)->at(col)->getLetter())
+    else if (search.length() == 1)
         return true;
     else
     {
+        // We've looked at the dice now
+        die->setMarked(true);
+
+        QString newSearch = search.mid(1);
         bool check = false;
 
         for (int i = -1; i <= 1; i++)
-        {
             for (int j = -1; j <= 1; j++)
-            {
-                if (i != 0 || j != 0)
-                {
-                    this->dice->at(row)->at(col)->setMarked(true);
-                    check = check || this->stringFound(search.mid(1), row + i, col + j);
-                }
-            }
-        }
+                if (!(i == 0 && j == 0))
+                    check = check || this->stringFound(newSearch, row + i, col + j);
 
         return check;
     }
