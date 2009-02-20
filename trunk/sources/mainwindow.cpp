@@ -199,13 +199,23 @@ void MainWindow::onTimerCountdown()
 
 void MainWindow::WordSearchThread::run()
 {
+//    QTime time;
+//    int totalTime;
+
     for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
     {
-        QString word = parent->lexicon->dictionary->at(i);
+        const QString& word = parent->lexicon->dictionary->at(i);
+
+//        time.start();
+//        bool found = parent->diceTray->stringFound(word);
+//        totalTime += time.elapsed();
+//        time.restart();
 
         if (parent->diceTray->stringFound(word))
             parent->wordsNotFound->append(word);
     }
+
+//    qDebug() << "Total: " << (totalTime) << " ms";
 }
 
 int MainWindow::computeWordScore()
