@@ -13,7 +13,6 @@ class Lexicon
     private:
         void load();
         QString filePath;
-
 };
 
 #endif // LEXICON_H
