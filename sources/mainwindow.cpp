@@ -144,11 +144,11 @@ void MainWindow::newBoard()
 
     // Label each game piece from diceTray
     this->diceTray = new DiceTray();
-    QList<QList<Die*>*>* pieces = this->diceTray->getTray();
+    Die* (*pieces)[4][4] = this->diceTray->getTray();
 
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(QString(pieces->at(i)->at(j)->getLetter()));
+            (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(QString((*pieces)[i][j]->getLetter()));
 
     // Start searching for words
     this->wordSearchThread->start();
@@ -200,22 +200,17 @@ void MainWindow::onTimerCountdown()
 void MainWindow::WordSearchThread::run()
 {
 //    QTime time;
-//    int totalTime;
+//    time.start();
 
     for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
     {
         const QString& word = parent->lexicon->dictionary->at(i);
 
-//        time.start();
-//        bool found = parent->diceTray->stringFound(word);
-//        totalTime += time.elapsed();
-//        time.restart();
-
         if (parent->diceTray->stringFound(word))
             parent->wordsNotFound->append(word);
     }
 
-//    qDebug() << "Total: " << (totalTime) << " ms";
+//    qDebug() << "Total: " << (time.elapsed()) << " ms";
 }
 
 int MainWindow::computeWordScore()
