@@ -3,15 +3,10 @@
 
 DiceTray::DiceTray()
 {
-    // Create four QLists of QList<Die*>
-    this->dice = new QList<QList<Die*>*>;
-    for (int i = 0; i < 4; i++)
-        this->dice->append(new QList<Die*>);
-
     // Seed the generator, setup for randomness
-    QStringList godsDice = QStringList();
     srand(QTime::currentTime().msec());
 
+    QStringList godsDice = QStringList();
     godsDice.append("LRYTTE");
     godsDice.append("ANAEEG");
     godsDice.append("AFPKFS");
@@ -37,7 +32,7 @@ DiceTray::DiceTray()
     {
         for (int col = 0; col < 4; col++)
         {
-            this->dice->at(row)->append(new Die((godsDice.at(0).at(rand() % 6)).toAscii()));
+            this->dice[row][col] = new Die((godsDice.at(0).at(rand() % 6)));
             godsDice.removeAt(0);
         }
     }
@@ -45,13 +40,21 @@ DiceTray::DiceTray()
 
 DiceTray::~DiceTray()
 {
-    this->dice->clear();
-    delete this->dice;
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+             delete this->dice[i][j];
 }
 
-QList<QList<Die*>*>* DiceTray::getTray()
+Die* (*DiceTray::getTray(void))[4][4]
 {
-    return this->dice;
+    return &this->dice;
+}
+
+void DiceTray::setTrayMarked(bool val)
+{
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            this->dice[i][j]->setMarked(val);
 }
 
 bool DiceTray::stringFound(QString search)
@@ -60,14 +63,14 @@ bool DiceTray::stringFound(QString search)
     QChar firstLetterOfSearch = search.at(0);
     bool found = false;
 
+    // Can this be moved out of loop?
+    this->setTrayMarked(false);
+
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
-            Die* die = this->dice->at(i)->at(j);
-            die->setMarked(false);
-
-            if (firstLetterOfSearch == die->getLetter())
+            if (firstLetterOfSearch == this->dice[i][j]->getLetter())
                 found = found || this->stringFound(search, i, j);
         }
     }
@@ -81,7 +84,7 @@ bool DiceTray::stringFound(const QString& search, int row, int col)
         return false;
 
     // Get some constants
-    Die* die = this->dice->at(row)->at(col);
+    Die* die = this->dice[row][col];
     QChar diceLetter = die->getLetter();
     QChar firstLetterOfSearch = search.at(0);
 

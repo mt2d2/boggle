@@ -9,12 +9,13 @@ class DiceTray
     public:
         DiceTray();
         ~DiceTray();
-        QList<QList<Die*>*>* getTray();
+        Die* (*getTray(void))[4][4];
         bool stringFound(QString search);
 
     private:
         bool stringFound(const QString& search, int row, int col);
-        QList<QList<Die*>*>* dice;
+        Die* dice[4][4];
+        void setTrayMarked(bool val);
 };
 
 #endif // DICETRAY_H
