@@ -71,11 +71,11 @@ bool DiceTray::stringFound(QString search)
         for (int j = 0; j < 4; j++)
         {
             if (firstLetterOfSearch == this->dice[i][j]->getLetter())
-                found = found || this->stringFound(search, i, j);
+                return found || this->stringFound(search, i, j);
         }
     }
 
-    return found;
+    return false;
 }
 
 bool DiceTray::stringFound(QString& search, int row, int col)
