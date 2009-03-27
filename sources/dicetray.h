@@ -13,7 +13,7 @@ class DiceTray
         bool stringFound(QString search);
 
     private:
-        bool stringFound(const QString& search, int row, int col);
+        bool stringFound(QString& search, int row, int col);
         Die* dice[4][4];
         void setTrayMarked(bool val);
 };
