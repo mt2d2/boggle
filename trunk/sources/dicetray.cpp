@@ -1,11 +1,12 @@
 #include "dicetray.h"
 #include <algorithm> // For std::random_shuffle
 #include <vector>    // For godsDice
+#include <time.h>	 // For time()
 
 DiceTray::DiceTray()
 {
     // Seed the generator, setup for randomness
-    srand(time(NULL));
+    srand((int)time(NULL));
 
     std::vector<std::string> godsDice;
     godsDice.push_back("LRYTTE");
