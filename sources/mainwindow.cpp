@@ -104,7 +104,7 @@ void MainWindow::stopGame()
         {
             QString wordToTest = enteredWords.at(i);
 
-            if  (this->diceTray->stringFound(wordToTest) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
+            if  (this->diceTray->stringFound(wordToTest.toStdString()) && this->lexicon->hasWord(wordToTest) && wordToTest.length() > 2)
                 this->correctWords->append(wordToTest);
             else
                this->incorrectWords->append(wordToTest);
@@ -199,18 +199,18 @@ void MainWindow::onTimerCountdown()
 
 void MainWindow::WordSearchThread::run()
 {
-//    QTime time;
-//    time.start();
+    QTime time;
+    time.start();
 
     for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
     {
         const QString& word = parent->lexicon->dictionary->at(i);
 
-        if (parent->diceTray->stringFound(word))
+        if (parent->diceTray->stringFound(word.toStdString()))
             parent->wordsNotFound->append(word);
     }
 
-//    qDebug() << "Total: " << (time.elapsed()) << " ms";
+    qDebug() << "Total: " << (time.elapsed()) << " ms";
 }
 
 int MainWindow::computeWordScore()
