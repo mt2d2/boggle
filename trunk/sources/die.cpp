@@ -1,6 +1,6 @@
 #include "die.h"
 
-Die::Die(const QChar& val)
+Die::Die(const char& val)
 {
     this->letter = val;
     this->setMarked(false);
@@ -21,7 +21,7 @@ void Die::setMarked(bool val)
     marked = val;
 }
 
-QChar Die::getLetter()
+char Die::getLetter()
 {
     return letter;
 }

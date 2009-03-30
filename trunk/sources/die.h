@@ -1,19 +1,17 @@
 #ifndef DIE_H
 #define DIE_H
 
-#include <QtCore/QChar>
-
 class Die
 {
     public:
-        Die(const QChar& val);
+        Die(const char& val);
         ~Die();
         bool isMarked();
         void setMarked(bool val);
-        QChar getLetter();
+        char getLetter();
 
     private:
-        QChar letter;
+        char letter;
         bool marked;
 };
 
