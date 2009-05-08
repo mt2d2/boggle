@@ -15,7 +15,6 @@ class DiceTray
     private:
         bool stringFound(const std::string& search, int row, int col);
         Die* dice[4][4];
-        void setTrayMarked(bool val);
 
         // unsigned required to banish warnings?
         unsigned int compareLength;

@@ -1,7 +1,7 @@
 #include "dicetray.h"
 #include <algorithm> // For std::random_shuffle
 #include <vector>    // For godsDice
-#include <time.h>	 // For time()
+#include <time.h>    // For time()
 
 DiceTray::DiceTray()
 {
@@ -52,20 +52,12 @@ Die* (*DiceTray::getTray(void))[4][4]
     return &this->dice;
 }
 
-void DiceTray::setTrayMarked(bool val)
-{
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            this->dice[i][j]->setMarked(val);
-}
-
 bool DiceTray::stringFound(std::string search)
 {
     // Make uppercase
     std::transform(search.begin(), search.end(), search.begin(), toupper);
 
     // The tray should be completely unused for a new word
-    this->setTrayMarked(false);
     this->compareLength = 0;
     char firstLetterOfSearch = search.at(0);
 
@@ -103,12 +95,21 @@ bool DiceTray::stringFound(const std::string& search, int row, int col)
         this->compareLength++;
 
         for (int i = -1; i <= 1; i++)
+        {
             for (int j = -1; j <= 1; j++)
+            {
                 if (!(i == 0 && j == 0))
+                {
                    if (this->stringFound(search, row + i, col + j))
-                       return true;
+                   {
+                        die->setMarked(false); // we've found the word, mark it clean and move along
+                        return true;
+                   }
+               }
+            }
+        }
 
-        this->setTrayMarked(false);
+        die->setMarked(false);
         this->compareLength--;
 
         return false;
