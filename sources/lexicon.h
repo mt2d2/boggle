@@ -9,10 +9,13 @@ class Lexicon
         Lexicon(const QString& val);
         ~Lexicon();
         bool hasWord(const QString& val);
-        QStringList* dictionary;
+        void filterLexicon(QString pattern);
+        QStringListIterator iterator();
     private:
         void load();
         QString filePath;
+        QStringList* dictionary;
+        QStringList* lexicon;
 };
 
 #endif // LEXICON_H
