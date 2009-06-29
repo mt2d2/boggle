@@ -81,8 +81,8 @@ void MainWindow::startGame()
 
     // Start the game!
     this->newBoard();
-    this->time = 180; // 180 (3 minutes)
-    this->timer->start(1000);
+    this->time = 180; // (3 minutes)
+    this->timer->start(1000); // click every second
 }
 
 void MainWindow::stopGame()
@@ -97,7 +97,6 @@ void MainWindow::stopGame()
     this->timer->stop();
 
     QStringList enteredWords = this->ui->wordEdit->toPlainText().simplified().split(" ");
-
     if (enteredWords.at(0) != "")
     {
         for (int i = 0; i < enteredWords.size(); i++)
@@ -115,6 +114,7 @@ void MainWindow::stopGame()
         this->wordsNotFound->removeAll(this->correctWords->at(i));
 
     QMessageBox msgBox(this);
+    msgBox.setWindowTitle(tr("Score"));
     msgBox.setText(tr("Score: %1\nValid words: %2\nInvalid Words: %3\n\nWords not found: %4").arg(this->computeWordScore()).arg(this->correctWords->join(", ")).arg(this->incorrectWords->join(", ")).arg(this->wordsNotFound->join(", ")));
     msgBox.exec();
 
@@ -146,9 +146,19 @@ void MainWindow::newBoard()
     this->diceTray = new DiceTray();
     Die* (*pieces)[4][4] = this->diceTray->getTray();
 
+    QString anti;
     for (int i = 0; i < 4; i++)
+    {
         for (int j = 0; j < 4; j++)
-            (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(QString((*pieces)[i][j]->getLetter()));
+        {
+            QString letter = QString((*pieces)[i][j]->getLetter());
+            (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(letter);
+            anti.append(letter);
+        }
+    }
+
+    // filter the lexicon
+    this->lexicon->filterLexicon(anti);
 
     // Start searching for words
     this->wordSearchThread->start();
@@ -202,9 +212,10 @@ void MainWindow::WordSearchThread::run()
     QTime time;
     time.start();
 
-    for (int i = 0; i < parent->lexicon->dictionary->size(); i++)
+    QStringListIterator i = parent->lexicon->iterator();
+    while (i.hasNext())
     {
-        const QString& word = parent->lexicon->dictionary->at(i);
+        const QString& word = i.next();
 
         if (parent->diceTray->stringFound(word.toStdString()))
             parent->wordsNotFound->append(word);
