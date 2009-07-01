@@ -38,7 +38,7 @@ void Lexicon::filterLexicon(QString pattern)
     this->lexicon->clear();
 
     // build the regexp
-    QRegExp rx(QString("[%1]+").arg(pattern.toLower()));
+    QRegExp rx(QString("[%1]+").arg(pattern));
 
     for (int i = 0; i < this->dictionary->size(); i++)
     {

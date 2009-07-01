@@ -11,6 +11,7 @@ class DiceTray
         ~DiceTray();
         Die* (*getTray(void))[4][4];
         bool stringFound(std::string search);
+        std::string toPattern();
 
     private:
         bool stringFound(const std::string& search, int row, int col);

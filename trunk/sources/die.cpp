@@ -1,6 +1,6 @@
 #include "die.h"
 
-Die::Die(const char& val)
+Die::Die(char val)
 {
     this->letter = val;
     this->setMarked(false);
@@ -8,7 +8,7 @@ Die::Die(const char& val)
 
 Die::~Die()
 {
-
+    // delete this->char;
 }
 
 bool Die::isMarked()
