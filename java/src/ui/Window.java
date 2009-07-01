@@ -160,11 +160,12 @@ public class Window extends JFrame
 				}
 
 				Window.this.time--;
-
-				String minutes = time / 60 + "";
-				String seconds = (time % 60 == 0) ? "00" : (time % 60 < 10) ? "0" + time % 60 : time % 60 + "";
+				
+				final String minutes = time / 60 + "";
+				final int mod = time % 60;
+				final String seconds = (mod < 10) ? ("0" + mod) : ("" + mod);
 				Window.this.status.setText("Time remaining: " + minutes + ":" + seconds);
-
+				
 				if (Window.this.time <= 60)
 					Window.this.status.setForeground(Color.RED);
 			}
@@ -229,7 +230,6 @@ public class Window extends JFrame
 			for (int j = 0; j < 4; j++)
 			{
 				grid[i][j] = new JLabel("-");
-				
 				grid[i][j].setVerticalAlignment(JLabel.CENTER);
 				grid[i][j].setHorizontalAlignment(JLabel.CENTER);
 				grid[i][j].setFont(new Font(grid[i][j].getFont().getFontName(), Font.BOLD, 20));
@@ -256,6 +256,8 @@ public class Window extends JFrame
 		g.setConstraints(scroll, c);
 		panel.add(scroll);
 
+		
 		return panel;
 	}
 }
+

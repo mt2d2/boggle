@@ -13,16 +13,14 @@ import javax.swing.JOptionPane;
 
 public class Lexicon implements Iterable<String>
 {
-	private List<String> dictionary;
+	private static final int SIZE = 81055;
+	private String[] dictionary;
 	private List<String> lexicon;
 
 	public Lexicon()
 	{
-		this.dictionary = new ArrayList<String>();
+		this.dictionary = new String[SIZE];
 		this.lexicon = new ArrayList<String>();
-
-		((ArrayList<String>)this.dictionary).ensureCapacity(81055);
-		((ArrayList<String>)this.lexicon).ensureCapacity(81055);
 
 		this.load();
 	}
@@ -52,9 +50,9 @@ public class Lexicon implements Iterable<String>
 		try
 		{
 			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("dictionary.txt")));
-			String line = null;
-			while ((line = reader.readLine()) != null)
-				this.dictionary.add(line);
+			for (int i = 0; i < SIZE; i++)
+				this.dictionary[i] = reader.readLine();
+			reader.close();
 		}
 		catch (Exception e)
 		{
@@ -69,3 +67,4 @@ public class Lexicon implements Iterable<String>
 		return this.lexicon.iterator();
 	}
 }
+
