@@ -24,7 +24,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class Window extends JFrame
 {
@@ -258,6 +261,37 @@ public class Window extends JFrame
 
 		
 		return panel;
+	}
+	
+	public static void main(String[] args)
+	{
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InstantiationException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		catch (UnsupportedLookAndFeelException e)
+		{
+			e.printStackTrace();
+		}
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				new Window().setVisible(true);
+			}
+		});
 	}
 }
 
