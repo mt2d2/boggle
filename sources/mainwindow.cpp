@@ -146,19 +146,14 @@ void MainWindow::newBoard()
     this->diceTray = new DiceTray();
     Die* (*pieces)[4][4] = this->diceTray->getTray();
 
-    QString anti;
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
         {
             QString letter = QString((*pieces)[i][j]->getLetter());
             (dynamic_cast<QLabel*>(this->ui->piecesLayout->itemAtPosition(i, j)->widget()))->setText(letter);
-            anti.append(letter);
         }
     }
-
-    // filter the lexicon
-    this->lexicon->filterLexicon(anti);
 
     // Start searching for words
     this->wordSearchThread->start();
@@ -211,6 +206,9 @@ void MainWindow::WordSearchThread::run()
 {
     QTime time;
     time.start();
+
+    // filter the lexicon
+    parent->lexicon->filterLexicon(QString::fromStdString(parent->diceTray->toPattern()));
 
     QStringListIterator i = parent->lexicon->iterator();
     while (i.hasNext())

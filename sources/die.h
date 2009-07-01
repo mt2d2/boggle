@@ -4,7 +4,7 @@
 class Die
 {
     public:
-        Die(const char& val);
+        Die(char val);
         ~Die();
         bool isMarked();
         void setMarked(bool val);

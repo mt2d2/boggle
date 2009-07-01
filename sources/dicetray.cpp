@@ -40,6 +40,19 @@ DiceTray::DiceTray()
     }
 }
 
+std::string DiceTray::toPattern()
+{
+    std::string toReturn;
+
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            toReturn += this->dice[i][j]->getLetter();
+
+    std::transform(toReturn.begin(), toReturn.end(), toReturn.begin(), tolower);
+
+    return toReturn;
+}
+
 DiceTray::~DiceTray()
 {
     for (int i = 0; i < 4; i++)
