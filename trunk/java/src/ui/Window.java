@@ -49,15 +49,14 @@ public class Window extends JFrame
 
 	public Window()
 	{
-		this.setTitle("Boggle");
+		this.allWords = new ArrayList<String>();
+		
+		this.setTitle(Messages.getString("Window.title"));
 		this.setPreferredSize(new Dimension(300, 400));
 		this.getContentPane().add(this.layoutUi());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.pack();
-
-		this.allWords = new ArrayList<String>();
-		
 		this.installListeners();
+		this.pack();
 	}
 
 	private void startGame()
@@ -65,11 +64,11 @@ public class Window extends JFrame
 		this.diceTray = new DiceTray();
 		Die[][] dice = this.diceTray.getDice();
 		for (int i = 0; i < 4; i++)
-			for(int j = 0; j < 4; j++)
+			for (int j = 0; j < 4; j++)
 				this.grid[i][j].setText(dice[i][j].toString());
-		
-		this.status.setText(MessageFormat.format("Time remaining: {0}", "3:00"));
-		this.trigger.setText("Stop");
+
+		this.status.setText(MessageFormat.format(Messages.getString("Window.timeRemaining"), Messages.getString("Window.defaultTime"))); 
+		this.trigger.setText(Messages.getString("Window.stop"));
 		this.input.setEnabled(true);
 		this.input.requestFocus();
 
@@ -93,17 +92,17 @@ public class Window extends JFrame
 				e.printStackTrace();
 			}
 		}
-		
+
 		this.timer.stop();
 		this.showReport();
-		
+
 		for (JLabel[] row : this.grid)
 			for (JLabel col : row)
-				col.setText("-");
+				col.setText(Messages.getString("Window.defaultGamePiece"));
 
 		this.status.setForeground(Color.BLACK);
-		this.status.setText("Press start to begin the game...");
-		this.trigger.setText("Start");
+		this.status.setText(Messages.getString("Window.defaultStatus"));
+		this.trigger.setText(Messages.getString("Window.start"));
 		this.input.setText("");
 		this.input.setEnabled(false);
 		this.trigger.requestFocus();
@@ -128,16 +127,16 @@ public class Window extends JFrame
 			public void run()
 			{
 				long start = System.currentTimeMillis();
-				
+
 				if (Window.this.lexicon == null)
 					Window.this.lexicon = new Lexicon();
-				
+
 				Window.this.lexicon.filter(Window.this.diceTray.toPattern());
 
 				for (String s : Window.this.lexicon)
 					if (Window.this.diceTray.stringFound(s))
 						Window.this.allWords.add(s);
-				
+
 				long finish = System.currentTimeMillis();
 				System.out.println("Total: " + (finish - start) + " ms");
 			}
@@ -157,12 +156,13 @@ public class Window extends JFrame
 				}
 
 				Window.this.time--;
-				
+
 				final String minutes = time / 60 + "";
 				final int mod = time % 60;
-				final String seconds = (mod < 10) ? ("0" + mod) : ("" + mod);
-				Window.this.status.setText(MessageFormat.format("Time remaining: {0}", MessageFormat.format("{0}:{1}", minutes, seconds)));
-				
+				final String seconds = (mod < 10) ? ("0" + mod) : ("" + mod); 
+				Window.this.status.setText(MessageFormat.format(
+						Messages.getString("Window.timeRemaining"), MessageFormat.format(Messages.getString("Window.timeFormat"), minutes, seconds)));
+
 				if (Window.this.time <= 60)
 					Window.this.status.setForeground(Color.RED);
 			}
@@ -202,8 +202,8 @@ public class Window extends JFrame
 		c.weighty = 1.0;
 		c.insets = new Insets(4, 4, 0, 4);
 
-		this.trigger = new JButton("Start");
-		this.status = new JLabel("Press start to begin the game...");
+		this.trigger = new JButton(Messages.getString("Window.start"));
+		this.status = new JLabel(Messages.getString("Window.defaultStatus"));
 
 		c.anchor = GridBagConstraints.WEST;
 		g.setConstraints(this.status, c);
@@ -226,7 +226,7 @@ public class Window extends JFrame
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				grid[i][j] = new JLabel("-");
+				grid[i][j] = new JLabel(Messages.getString("Window.defaultGamePiece"));
 				grid[i][j].setVerticalAlignment(JLabel.CENTER);
 				grid[i][j].setHorizontalAlignment(JLabel.CENTER);
 				grid[i][j].setFont(new Font(grid[i][j].getFont().getFontName(), Font.BOLD, 20));
@@ -253,10 +253,9 @@ public class Window extends JFrame
 		g.setConstraints(scroll, c);
 		panel.add(scroll);
 
-		
 		return panel;
 	}
-	
+
 	public static void main(String[] args)
 	{
 		try
@@ -288,4 +287,3 @@ public class Window extends JFrame
 		});
 	}
 }
-
