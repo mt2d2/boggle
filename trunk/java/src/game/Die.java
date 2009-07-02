@@ -31,6 +31,6 @@ public class Die
 	@Override
 	public String toString()
 	{
-		return this.letter + "";
+		return Character.toString(this.letter);
 	}
 }

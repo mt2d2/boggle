@@ -1,5 +1,6 @@
-package game;
+package ui;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,14 +33,15 @@ public class Score
 		}
 
 		StringBuilder message = new StringBuilder();
-		message.append("You have a final score of: " + this.computeScore() + ".\n");
-		message.append("You guessed " + this.correct.size() + " words correctly.\n");
-		message.append("  [" + join(this.correct, " ") + "]\n");
-		message.append("You guessed " + this.incorrect.size() + " words incorrectly.\n");
-		message.append("  [" + join(this.incorrect, " ") + "]\n");
+
+		message.append(MessageFormat.format("You have a final score of {0}.\n", this.computeScore()));
+		message.append(MessageFormat.format("You guessed {0,choice,0#0 words|1# 1 word|1<{0} words} correctly.\n", this.correct.size()));
+		message.append(MessageFormat.format("  [{0}]\n", join(this.correct, " ")));
+		message.append(MessageFormat.format("You guessed {0,choice,0#0 words|1# 1 word|1<{0} words} incorrectly.\n", this.incorrect.size()));
+		message.append(MessageFormat.format("  [{0}]\n", join(this.incorrect, " ")));
 		this.allWords.removeAll(this.correct);
-		message.append("You did not guess " + this.allWords.size() + " words.\n");
-		message.append("  [" + join(this.allWords, " ") + "]");
+		message.append(MessageFormat.format("You did not guess {0} {0,choice,0#words|1#word|1<words}.\n", this.allWords.size()));
+		message.append(MessageFormat.format("  [{0}]\n", join(this.allWords, " ")));
 
 		return message.toString();
 	}
@@ -61,7 +63,7 @@ public class Score
 			else if (word.length() >= 11)
 				score += 8;
 		}
-		
+
 		for (String word : this.incorrect)
 		{
 			if (word.length() <= 4)
@@ -83,7 +85,7 @@ public class Score
 	{
 		if (input == null || input.length() == 0)
 			return Collections.emptyList();
-		
+
 		return Arrays.asList(input.split(" "));
 	}
 
@@ -91,12 +93,12 @@ public class Score
 	{
 		if (input == null || input.size() == 0)
 			return "";
-		
+
 		StringBuilder sb = new StringBuilder();
 
 		Iterator<String> itr = input.iterator();
-		sb.append(itr.next());		
-		while(itr.hasNext())
+		sb.append(itr.next());
+		while (itr.hasNext())
 			sb.append(delim).append(itr.next());
 
 		return sb.toString();
