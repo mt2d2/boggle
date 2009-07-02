@@ -3,7 +3,6 @@ package ui;
 import game.DiceTray;
 import game.Die;
 import game.Lexicon;
-import game.Score;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,6 +14,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class Window extends JFrame
 			for(int j = 0; j < 4; j++)
 				this.grid[i][j].setText(dice[i][j].toString());
 		
-		this.status.setText("Time remaining: 3:00");
+		this.status.setText(MessageFormat.format("Time remaining: {0}", "3:00"));
 		this.trigger.setText("Stop");
 		this.input.setEnabled(true);
 		this.input.requestFocus();
@@ -161,7 +161,7 @@ public class Window extends JFrame
 				final String minutes = time / 60 + "";
 				final int mod = time % 60;
 				final String seconds = (mod < 10) ? ("0" + mod) : ("" + mod);
-				Window.this.status.setText("Time remaining: " + minutes + ":" + seconds);
+				Window.this.status.setText(MessageFormat.format("Time remaining: {0}", MessageFormat.format("{0}:{1}", minutes, seconds)));
 				
 				if (Window.this.time <= 60)
 					Window.this.status.setForeground(Color.RED);
