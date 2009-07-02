@@ -34,14 +34,14 @@ public class Score
 
 		StringBuilder message = new StringBuilder();
 
-		message.append(MessageFormat.format("You have a final score of {0}.\n", this.computeScore()));
-		message.append(MessageFormat.format("You guessed {0,choice,0#0 words|1# 1 word|1<{0} words} correctly.\n", this.correct.size()));
-		message.append(MessageFormat.format("  [{0}]\n", join(this.correct, " ")));
-		message.append(MessageFormat.format("You guessed {0,choice,0#0 words|1# 1 word|1<{0} words} incorrectly.\n", this.incorrect.size()));
-		message.append(MessageFormat.format("  [{0}]\n", join(this.incorrect, " ")));
+		message.append(MessageFormat.format(Messages.getString("Score.finalScore"), this.computeScore())); //$NON-NLS-1$
+		message.append(MessageFormat.format(Messages.getString("Score.correct"), this.correct.size())); //$NON-NLS-1$
+		message.append(MessageFormat.format(Messages.getString("Score.listFormat"), join(this.correct, " "))); //$NON-NLS-1$
+		message.append(MessageFormat.format(Messages.getString("Score.incorrect"), this.incorrect.size())); //$NON-NLS-1$
+		message.append(MessageFormat.format(Messages.getString("Score.listFormat"), join(this.incorrect, " "))); //$NON-NLS-1$ //$NON-NLS-2$
 		this.allWords.removeAll(this.correct);
-		message.append(MessageFormat.format("You did not guess {0} {0,choice,0#words|1#word|1<words}.\n", this.allWords.size()));
-		message.append(MessageFormat.format("  [{0}]\n", join(this.allWords, " ")));
+		message.append(MessageFormat.format(Messages.getString("Score.allWords"), this.allWords.size())); //$NON-NLS-1$
+		message.append(MessageFormat.format(Messages.getString("Score.listFormat"), join(this.allWords, " "))); //$NON-NLS-1$
 
 		return message.toString();
 	}
