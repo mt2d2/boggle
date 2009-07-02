@@ -3,6 +3,7 @@ package ui;
 import game.DiceTray;
 import game.Die;
 import game.Lexicon;
+import game.Score;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,7 +46,6 @@ public class Window extends JFrame
 	private DiceTray diceTray;
 	private Thread search;
 	private List<String> allWords;
-	private List<String> wordsFound;
 
 	public Window()
 	{
@@ -55,12 +55,8 @@ public class Window extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 
-		this.running = false;
-		this.time = 0;
-		this.lexicon = new Lexicon();
 		this.allWords = new ArrayList<String>();
-		this.wordsFound = new ArrayList<String>();
-	
+		
 		this.installListeners();
 	}
 
@@ -78,7 +74,6 @@ public class Window extends JFrame
 		this.input.requestFocus();
 
 		this.allWords.clear();
-		this.wordsFound.clear();
 		this.search = this.backgroundSearch();
 		this.search.start();
 		this.time = 180;
@@ -100,7 +95,6 @@ public class Window extends JFrame
 		}
 		
 		this.timer.stop();
-		
 		this.showReport();
 		
 		for (JLabel[] row : this.grid)
@@ -110,19 +104,16 @@ public class Window extends JFrame
 		this.status.setForeground(Color.BLACK);
 		this.status.setText("Press start to begin the game...");
 		this.trigger.setText("Start");
+		this.input.setText("");
 		this.input.setEnabled(false);
 		this.trigger.requestFocus();
-		this.diceTray = null;
 	}
 
 	private void showReport()
 	{
-		String joined = "";
-		for (String s : this.allWords)
-			joined += s + " ";
-
 		JTextArea ta = new JTextArea(12, 40);
-		ta.setText("Found: " + joined);
+		ta.setText(new Score(this.allWords).score(this.input.getText().toLowerCase().trim()));
+		ta.setCaretPosition(0);
 		ta.setEditable(false);
 		ta.setLineWrap(true);
 		ta.setWrapStyleWord(true);
@@ -137,6 +128,9 @@ public class Window extends JFrame
 			public void run()
 			{
 				long start = System.currentTimeMillis();
+				
+				if (Window.this.lexicon == null)
+					Window.this.lexicon = new Lexicon();
 				
 				Window.this.lexicon.filter(Window.this.diceTray.toPattern());
 
