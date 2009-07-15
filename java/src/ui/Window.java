@@ -61,6 +61,8 @@ public class Window extends JFrame
 
 	private void startGame()
 	{
+		this.running = true;
+		
 		this.diceTray = new DiceTray();
 		Die[][] dice = this.diceTray.getDice();
 		for (int i = 0; i < 4; i++)
@@ -81,11 +83,13 @@ public class Window extends JFrame
 
 	private void stopGame()
 	{
+		this.running = false;
+		
 		if (this.search.isAlive())
 		{
 			try
 			{
-				this.search.wait();
+				this.search.join();
 			}
 			catch (InterruptedException e)
 			{
@@ -173,8 +177,6 @@ public class Window extends JFrame
 					Window.this.stopGame();
 				else
 					Window.this.startGame();
-
-				Window.this.running = !Window.this.running;
 			}
 		});
 	}
