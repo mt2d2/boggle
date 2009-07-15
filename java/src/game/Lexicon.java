@@ -61,7 +61,6 @@ public class Lexicon implements Iterable<String>
 		}
 	}
 
-	@Override
 	public Iterator<String> iterator()
 	{
 		return this.lexicon.iterator();

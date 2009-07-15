@@ -123,7 +123,6 @@ public class Window extends JFrame
 	private Thread backgroundSearch()
 	{
 		return new Thread(new Runnable() {
-			@Override
 			public void run()
 			{
 				long start = System.currentTimeMillis();
@@ -146,7 +145,6 @@ public class Window extends JFrame
 	private void installListeners()
 	{
 		this.timer = new Timer(1000, new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				if (Window.this.time == 0)
@@ -169,7 +167,6 @@ public class Window extends JFrame
 		});
 
 		this.trigger.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				if (Window.this.running)
