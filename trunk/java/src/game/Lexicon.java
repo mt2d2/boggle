@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
@@ -29,15 +28,10 @@ public class Lexicon implements Iterable<String>
 	{
 		this.lexicon.clear();
 
-		Pattern p = Pattern.compile('[' + pattern + "]+");
-
+		Pattern p = Pattern.compile("^[" + pattern + "]{3,}$");
 		for (String s : this.dictionary)
-		{
-			Matcher m = p.matcher(s);
-
-			if (m.matches())
+			if (p.matcher(s).matches())
 				this.lexicon.add(s);
-		}
 	}
 
 	public boolean hasWord(String word)
@@ -50,13 +44,15 @@ public class Lexicon implements Iterable<String>
 		try
 		{
 			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("dictionary.txt")));
-			for (int i = 0; i < SIZE; i++)
+
+            for (int i = 0; i < SIZE; i++)
 				this.dictionary[i] = reader.readLine();
 			reader.close();
 		}
 		catch (Exception e)
 		{
-			JOptionPane.showMessageDialog(null, "A fatal error in loading the dictionary has prevented the application from launching.");
+			JOptionPane.showMessageDialog(null, "A fatal error in loading the dictionary has prevented the application from launching.\n"
+                    + e.getMessage());
 			System.exit(-1);
 		}
 	}
