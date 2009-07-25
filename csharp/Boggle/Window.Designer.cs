@@ -1,4 +1,4 @@
-﻿
+
     partial class Window
     {
         /// <summary>

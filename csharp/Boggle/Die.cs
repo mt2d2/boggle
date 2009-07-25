@@ -1,4 +1,4 @@
-﻿class Die
+class Die
 {
     public bool marked { get; set; }
     public char letter { get; set; }
