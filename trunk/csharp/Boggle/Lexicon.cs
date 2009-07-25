@@ -23,9 +23,7 @@ class Lexicon
         {
             string line;
             while ((line = reader.ReadLine()) != null)
-            {
                 this.dictionary.Add(line);
-            }
         }
     }
 
@@ -35,7 +33,7 @@ class Lexicon
         this.lexicon.Clear();
 
         // build a regexp that will only allow certain characters
-        Regex rx = new Regex("[" + pattern + "]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        Regex rx = new Regex("[" + pattern.ToLower() + "]+", RegexOptions.Compiled);
 
         foreach (string s in this.dictionary)
             if (rx.IsMatch(s))
