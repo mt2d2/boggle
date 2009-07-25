@@ -193,8 +193,8 @@ void MainWindow::onTimerCountdown()
 
     this->time--;
 
-    QString minutes = QString("%1").arg((time / 60));
-    QString seconds = (time % 60 == 0) ? "00" :  (time % 60 < 10) ? QString("0%1").arg(time % 60) : QString("%1").arg(time % 60);
+    QString minutes = QString("%1").arg(time / 60);
+    QString seconds = (time % 60 < 10) ? QString("%10").arg(time % 60) : QString("%1").arg(time % 60);
 
     this->ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg(minutes + ":" + seconds ));
 
