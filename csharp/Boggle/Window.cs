@@ -99,8 +99,9 @@ public partial class Window : Form
 
 		this.time--;
 
-		string minutes = this.time / 60 + "";
-		string seconds = (this.time % 60 < 10) ? time % 60 + "0" : time % 60 + "";
+	 	string minutes = time / 60 + "";
+		int mod = time % 60;
+		string seconds = (mod < 10) ? ("0" + mod) : ("" + mod); 
 
 		this.gameStatus.Text = "Time remaining: " + minutes + ":" + seconds;
 
