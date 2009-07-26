@@ -47,6 +47,8 @@ void Lexicon::filterLexicon(QString pattern)
         if (rx.exactMatch(word))
             this->lexicon->append(word);
     }
+
+    qDebug() << "Skipped " << this->dictionary->size() - this->lexicon->size() << " words";
 }
 
 QStringListIterator Lexicon::iterator()

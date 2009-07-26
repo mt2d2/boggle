@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QDialog(parent), ui(new Ui::MainWindow
     this->incorrectWords = new QStringList();
     this->wordsNotFound = new QStringList();
     this->diceTray = NULL;
-    this->lexicon = new Lexicon(":/dictionary.txt");
+    this->lexicon = NULL;
     this->wordSearchThread = new WordSearchThread(this);
 
     // Make custom connections
@@ -194,7 +194,8 @@ void MainWindow::onTimerCountdown()
     this->time--;
 
     QString minutes = QString("%1").arg(time / 60);
-    QString seconds = (time % 60 < 10) ? QString("%10").arg(time % 60) : QString("%1").arg(time % 60);
+    int mod = time % 60;
+    QString seconds = (mod < 10) ? QString("0%1").arg(mod) : QString("%1").arg(mod);
 
     this->ui->gameStatus->setText(QString(tr("Time remaining: %1")).arg(minutes + ":" + seconds ));
 
@@ -206,6 +207,9 @@ void MainWindow::WordSearchThread::run()
 {
     QTime time;
     time.start();
+
+    if (parent->lexicon == NULL)
+        parent->lexicon = new Lexicon(":/dictionary.txt");
 
     // filter the lexicon
     parent->lexicon->filterLexicon(QString::fromStdString(parent->diceTray->toPattern()));
