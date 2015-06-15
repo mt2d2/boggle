@@ -1,0 +1,1 @@
+This is the classic word scramble game implemented orginally in Java with Swing, but also later with C++ and Qt. Every attempt to stay faithful to the game was made. This was inspired by a first-year, university project.
